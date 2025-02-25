@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-# flutter_boiler
-Flutter project
-=======
-# base
-
 A new Flutter project.
 
 ## Getting Started
