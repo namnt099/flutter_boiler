@@ -26,7 +26,8 @@ platform :android do
       app: "1:212347360763:android:3f0583c2edb094672ee75e",
       android_artifact_type: "APK",
       android_artifact_path: "../build/app/outputs/apk/product/release/app-product-release.apk",
-      groups: "test"
+      groups: "test",
+      firebase_cli_token: ENV["FIREBASE_TOKEN"]
     )
   end
 end
