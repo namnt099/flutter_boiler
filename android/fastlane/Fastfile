@@ -5,12 +5,12 @@ platform :android do
   lane :deploy_firebase do
     flavor = ENV["FLAVOR"] || "product" # Lấy từ biến môi trường, mặc định là "product"
     UI.message "🚀 Building flavor: #{flavor}" # Kiểm tra giá trị FLAVOR
+    app_id = ENV["APP_ID"] || ""
 
-
-    apk_path = "../build/app/outputs/apk/#{flavor}/release/app-#{flavor}-release.apk"
+    apk_path = "../build/app/outputs/flutter-apk/app-#{flavor}-release.apk"
 
     firebase_app_distribution(
-      app: "1:212347360763:android:3f0583c2edb094672ee75e",
+      app: app_id,
       android_artifact_type: "APK",
       android_artifact_path: apk_path,
       groups: "test",

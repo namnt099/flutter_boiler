@@ -58,6 +58,15 @@ jobs:
             echo "${{ secrets.DOTENV_PRODUCT }}" > .env.product
           fi
 
+      - name: Get APP_ID from secret
+        run: |
+          if [[ "${{ github.event.inputs.FLAVOR }}" == "develop" ]]; then
+            echo "APP_ID=$(echo '${{ secrets.DOTENV_DEVELOP }}' | grep 'APP_ID' | cut -d '=' -f2)" >> $GITHUB_ENV
+          else
+            echo "APP_ID=$(echo '${{ secrets.DOTENV_PRODUCT }}' | grep 'APP_ID' | cut -d '=' -f2)" >> $GITHUB_ENV
+          fi
+
+
       - name: Create signing folder
         run: mkdir -p android/app/signing/
 
@@ -82,6 +91,7 @@ jobs:
         env:
           FLAVOR: "${{ github.event.inputs.FLAVOR }}"
           FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
+          APP_ID: "${{ env.APP_ID }}"
 
 
 
