@@ -7,7 +7,14 @@ platform :android do
     UI.message "🚀 Building flavor: #{flavor}" # Kiểm tra giá trị FLAVOR
 
     env_file = ".env.#{flavor}" 
+    
+    UI.message "🚀 Env file: #{env_file}"
 
+    gradlew_path = File.expand_path("../gradlew", __dir__)
+    unless File.exist?(gradlew_path)
+      UI.user_error!("❌ gradlew not found at #{gradlew_path}")
+    end
+    
     gradle(
       task: "assemble#{flavor.capitalize}Release",
       properties: {

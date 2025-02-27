@@ -68,9 +68,13 @@ jobs:
       - name: Decode key.properties
         run: |
           echo -n "${{ secrets.KEY_PROPERTIES_BASE64 }}" | base64 --decode > android/key.properties
+      
       - name: Debug GitHub Inputs
         run: |
           echo "FLAVOR selected: ${{ github.event.inputs.FLAVOR }}"
+
+      - name: Set execute permission for gradlew
+        run: chmod +x android/gradlew
 
       - name: Deploy to Firebase using Fastlane
         run: cd android && fastlane android deploy_firebase
