@@ -3,7 +3,7 @@ name: Deploy to Firebase
 on:
   push:
     branches:
-      - main  # Chạy khi push lên nhánh main
+      - main
 
 jobs:
   build-and-deploy:
@@ -21,8 +21,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Install Fastlane
-        run: gem install fastlane -NV
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Setup Fastlane
+        run: |
+          bundle config set path 'vendor/bundle'
+          bundle install
 
       - name: Authenticate Firebase CLI
         run: echo "${{ secrets.FIREBASE_TOKEN }}" | firebase login:ci --token "$(cat -)"
@@ -31,7 +36,7 @@ jobs:
         run: flutter build apk --release --flavor product --target=lib/main_product.dart
 
       - name: List APK files (Debugging)
-        run: ls -lah /build/app/outputs/apk/product/release/
+        run: ls -lah build/app/outputs/apk/product/release/
 
       - name: Deploy to Firebase using Fastlane
-        run: cd android && fastlane android deploy_firebase
+        run: cd android && bundle exec fastlane android deploy_firebase
