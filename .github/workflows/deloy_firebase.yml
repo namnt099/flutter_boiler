@@ -1,0 +1,37 @@
+name: Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main  # Chạy khi push lên nhánh main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.22.0  # Chọn phiên bản Flutter phù hợp với dự án của bạn
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Install Fastlane
+        run: gem install fastlane -NV
+
+      - name: Authenticate Firebase CLI
+        run: echo "${{ secrets.FIREBASE_TOKEN }}" | firebase login:ci --token "$(cat -)"
+
+      - name: Build APK for Product Flavor
+        run: flutter build apk --release --flavor product --target=lib/main_product.dart
+
+      - name: List APK files (Debugging)
+        run: ls -lah /build/app/outputs/apk/product/release/
+
+      - name: Deploy to Firebase using Fastlane
+        run: cd android && fastlane android deploy_firebase
