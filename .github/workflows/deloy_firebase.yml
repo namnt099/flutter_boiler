@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
-        
+
       - name: Install Fastlane
         run: gem install fastlane --user-install
 
@@ -34,4 +34,4 @@ jobs:
         run: ls -lah build/app/outputs/apk/product/release/
 
       - name: Deploy to Firebase using Fastlane
-        run: cd android && bundle exec fastlane android deploy_firebase
+        run: cd android && fastlane android deploy_firebase
