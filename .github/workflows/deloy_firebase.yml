@@ -24,10 +24,11 @@ jobs:
       - name: Install Bundler
         run: gem install bundler
 
-      - name: Setup Fastlane
-        run: |
-          bundle config set path 'vendor/bundle'
-          bundle install
+      - name: Setup Ruby & Fastlane
+        uses: ruby/setup-ruby@v1
+        with: 
+          ruby-version: 3.2  # Chọn phiên bản Ruby phù hợp
+          bundler-cache: true
 
       - name: Authenticate Firebase CLI
         run: echo "${{ secrets.FIREBASE_TOKEN }}" | firebase login:ci --token "$(cat -)"
