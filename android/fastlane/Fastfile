@@ -19,7 +19,9 @@ platform :android do
   desc "Build and distribute APK to Firebase"
   lane :deploy_firebase do
     gradle(task: "assembleProductRelease", properties: {
-    "target": "lib/main_product.dart"
+    "target": "lib/main_product.dart",
+    "envFile": ".env.product",
+    "flavor": "product",
   })
 
     firebase_app_distribution(

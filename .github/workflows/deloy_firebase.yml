@@ -4,7 +4,16 @@ on:
   push:
     branches:
       - main
-
+  workflow_dispatch:
+    inputs:
+      FLAVOR:
+        description: 'Select the flavor (develop or product)'
+        required: true
+        default: 'product'
+        type: choice
+        options:
+          - develop
+          - product
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -33,10 +42,25 @@ jobs:
           export PATH="$GEM_HOME/bin:$PATH"
           gem install fastlane-plugin-firebase_app_distribution --user-install
 
+      - name: Set environment variables
+        run: |
+          if [[ "${{ github.event.inputs.FLAVOR }}" == "develop" ]]; then
+            echo "${{ secrets.DOTENV_DEVELOP }}" > .env
+          else
+            echo "${{ secrets.DOTENV_PRODUCT }}" > .env
+          fi
 
       - name: Set Firebase CLI Token
         run: echo "${{ secrets.FIREBASE_TOKEN }}" > "$HOME/.firebase_token"
       
+      - name: Set environment variables
+        run: |
+          if [[ "${{ github.event.inputs.FLAVOR }}" == "develop" ]]; then
+            echo "${{ secrets.DOTENV_DEVELOP }}" > .env.develop
+          else
+            echo "${{ secrets.DOTENV_PRODUCT }}" > .env.product
+          fi
+
       - name: Create signing folder
         run: mkdir -p android/app/signing/
 
@@ -48,13 +72,17 @@ jobs:
         run: |
           echo -n "${{ secrets.KEY_PROPERTIES_BASE64 }}" | base64 --decode > android/key.properties
 
-      - name: Build APK for Product Flavor
-        run: flutter build apk --release --flavor product --target=lib/main_product.dart
+      - name: Build APK for the selected flavor
+        run: |
+          flutter build apk --release --flavor ${{ github.event.inputs.FLAVOR }} --target=lib/main_${{ github.event.inputs.FLAVOR }}.dart
+        env:
+          FLAVOR: "${{ github.event.inputs.FLAVOR }}"
 
       - name: List APK files (Debugging)
         run: ls -lah build/app/outputs/apk/product/release/
 
       - name: Deploy to Firebase using Fastlane
-        run: cd android && fastlane android deploy_firebase
-        env: 
+        run: cd android && fastlane android deploy_firebase flavor=${{ github.event.inputs.FLAVOR }}
+        env:
           FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
+
