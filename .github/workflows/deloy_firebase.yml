@@ -27,9 +27,9 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane --user-install
 
-      - name: Authenticate Firebase CLI
-        run: echo "${{ secrets.FIREBASE_TOKEN }}" | firebase login:ci --token "$(cat -)"
-
+      - name: Set Firebase CLI Token
+        run: echo "${{ secrets.FIREBASE_TOKEN }}" > "$HOME/.firebase_token"
+        
       - name: Build APK for Product Flavor
         run: flutter build apk --release --flavor product --target=lib/main_product.dart
 
