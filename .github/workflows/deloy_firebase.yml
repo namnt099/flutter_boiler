@@ -42,9 +42,9 @@ jobs:
       - name: Set environment variables
         run: |
           if [[ "${{ github.event.inputs.FLAVOR }}" == "develop" ]]; then
-            echo "${{ secrets.DOTENV_DEVELOP }}" > .env.product
+            echo "${{ secrets.DOTENV_DEVELOP }}" > .env.develop
           else
-            echo "${{ secrets.DOTENV_PRODUCT }}" > .env.develop
+            echo "${{ secrets.DOTENV_PRODUCT }}" > .env.product
           fi
 
       - name: Set Firebase CLI Token

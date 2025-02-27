@@ -22,6 +22,7 @@ platform :android do
       android_artifact_type: "APK",
       android_artifact_path: apk_path,
       groups: "test",
+      release_notes: "Release notes for this #{flavor} build",
       firebase_cli_token: ENV["FIREBASE_TOKEN"]
     )
   end
