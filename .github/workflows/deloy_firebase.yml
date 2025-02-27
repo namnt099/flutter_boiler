@@ -29,9 +29,10 @@ jobs:
 
       - name: Install Fastlane Plugin for Firebase
         run: |
-          cd android
-          fastlane add_plugin firebase_app_distribution
-          bundle install
+          export GEM_HOME="$HOME/.gem"
+          export PATH="$GEM_HOME/bin:$PATH"
+          gem install fastlane-plugin-firebase_app_distribution --user-install
+
 
       - name: Set Firebase CLI Token
         run: echo "${{ secrets.FIREBASE_TOKEN }}" > "$HOME/.firebase_token"
