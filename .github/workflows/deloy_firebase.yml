@@ -73,14 +73,9 @@ jobs:
         run: |
           echo "FLAVOR selected: ${{ github.event.inputs.FLAVOR }}"
 
-      - name: Setup Gradle Wrapper
+      - name: Build APK for the selected flavor
         run: |
-          cd android
-          ./gradlew wrapper
-          chmod +x gradlew
-
-      - name: Set execute permission for gradlew
-        run: chmod +x android/gradlew
+          flutter build apk --release --flavor ${{ github.event.inputs.FLAVOR }} --target=lib/main_${{ github.event.inputs.FLAVOR }}.dart
 
       - name: Deploy to Firebase using Fastlane
         run: cd android && fastlane android deploy_firebase

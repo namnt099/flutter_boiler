@@ -6,23 +6,6 @@ platform :android do
     flavor = ENV["FLAVOR"] || "product" # Lấy từ biến môi trường, mặc định là "product"
     UI.message "🚀 Building flavor: #{flavor}" # Kiểm tra giá trị FLAVOR
 
-    env_file = ".env.#{flavor}" 
-    
-    UI.message "🚀 Env file: #{env_file}"
-
-    gradlew_path = File.expand_path("../gradlew", __dir__)
-    unless File.exist?(gradlew_path)
-      UI.user_error!("❌ gradlew not found at #{gradlew_path}")
-    end
-    
-    gradle(
-      task: "assemble#{flavor.capitalize}Release",
-      properties: {
-        "target": "lib/main_#{flavor}.dart",
-        "envFile": env_file,
-        "flavor": flavor
-      }
-    )
 
     apk_path = "../build/app/outputs/apk/#{flavor}/release/app-#{flavor}-release.apk"
 
