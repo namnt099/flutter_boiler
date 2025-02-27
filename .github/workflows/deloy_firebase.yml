@@ -76,7 +76,7 @@ jobs:
           FLAVOR: "${{ github.event.inputs.FLAVOR }}"
 
       - name: List APK files (Debugging)
-        run: ls -lah build/app/outputs/apk/product/release/
+        run: ls -lah build/app/outputs/apk/${{ github.event.inputs.FLAVOR }}/release/
 
       - name: Deploy to Firebase using Fastlane
         run: cd android && fastlane android deploy_firebase flavor=${{ github.event.inputs.FLAVOR }}
