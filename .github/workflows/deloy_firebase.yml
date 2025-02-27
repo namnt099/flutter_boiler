@@ -68,18 +68,13 @@ jobs:
       - name: Decode key.properties
         run: |
           echo -n "${{ secrets.KEY_PROPERTIES_BASE64 }}" | base64 --decode > android/key.properties
-
-      - name: Build APK for the selected flavor
+      - name: Debug GitHub Inputs
         run: |
-          flutter build apk --release --flavor ${{ github.event.inputs.FLAVOR }} --target=lib/main_${{ github.event.inputs.FLAVOR }}.dart
-        env:
-          FLAVOR: "${{ github.event.inputs.FLAVOR }}"
-
-      - name: List APK files (Debugging)
-        run: ls -lah build/app/outputs/apk/${{ github.event.inputs.FLAVOR }}/release/
+          echo "FLAVOR selected: ${{ github.event.inputs.FLAVOR }}"
 
       - name: Deploy to Firebase using Fastlane
-        run: cd android && fastlane android deploy_firebase flavor=${{ github.event.inputs.FLAVOR }}
+        run: cd android && fastlane android deploy_firebase --flavor ${{ github.event.inputs.FLAVOR }}
         env:
           FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
+
 
