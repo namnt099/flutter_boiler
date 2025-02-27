@@ -27,6 +27,12 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane --user-install
 
+      - name: Install Fastlane Plugin for Firebase
+        run: |
+          cd android
+          fastlane add_plugin firebase_app_distribution
+          bundle install
+
       - name: Set Firebase CLI Token
         run: echo "${{ secrets.FIREBASE_TOKEN }}" > "$HOME/.firebase_token"
       
@@ -35,11 +41,11 @@ jobs:
 
       - name: Decode Keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/signing/release_key.jks
+          echo -n "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/signing/release_key.jks
 
       - name: Decode key.properties
         run: |
-          echo "${{ secrets.KEY_PROPERTIES_BASE64 }}" | base64 --decode > android/key.properties
+          echo -n "${{ secrets.KEY_PROPERTIES_BASE64 }}" | base64 --decode > android/key.properties
 
       - name: Build APK for Product Flavor
         run: flutter build apk --release --flavor product --target=lib/main_product.dart
