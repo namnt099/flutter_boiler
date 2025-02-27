@@ -1,10 +1,13 @@
+default_platform(:android)
+
 platform :android do
   desc "Build and distribute APK to Firebase"
-  lane :deploy_firebase do |options|
-    flavor = options[:flavor] || "product"
-    UI.message "🚀 Building flavor: #{flavor}" # In ra để kiểm tra
-    env_file = ".env.#{flavor}"
-    
+  lane :deploy_firebase do
+    flavor = ENV["FLAVOR"] || "product" # Lấy từ biến môi trường, mặc định là "product"
+    UI.message "🚀 Building flavor: #{flavor}" # Kiểm tra giá trị FLAVOR
+
+    env_file = ".env.#{flavor}" 
+
     gradle(
       task: "assemble#{flavor.capitalize}Release",
       properties: {

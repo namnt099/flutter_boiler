@@ -73,8 +73,10 @@ jobs:
           echo "FLAVOR selected: ${{ github.event.inputs.FLAVOR }}"
 
       - name: Deploy to Firebase using Fastlane
-        run: cd android && fastlane android deploy_firebase flavor:${{ github.event.inputs.FLAVOR }}
+        run: cd android && fastlane android deploy_firebase
         env:
+          FLAVOR: "${{ github.event.inputs.FLAVOR }}"
           FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
+
 
 
