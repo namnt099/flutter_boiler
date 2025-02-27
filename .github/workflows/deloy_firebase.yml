@@ -73,14 +73,11 @@ jobs:
         run: |
           echo "FLAVOR selected: ${{ github.event.inputs.FLAVOR }}"
 
-      - name: Ensure Gradle Wrapper Exists
+      - name: Setup Gradle Wrapper
         run: |
-          if [ ! -f "android/gradlew" ]; then
-            echo "🚨 gradlew không tồn tại! Đang tải lại..."
-            cd android
-            ./gradlew --version || ./gradlew tasks
-          fi
-
+          cd android
+          ./gradlew wrapper
+          chmod +x gradlew
 
       - name: Set execute permission for gradlew
         run: chmod +x android/gradlew
