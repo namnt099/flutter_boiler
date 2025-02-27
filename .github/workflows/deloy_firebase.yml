@@ -56,3 +56,5 @@ jobs:
 
       - name: Deploy to Firebase using Fastlane
         run: cd android && fastlane android deploy_firebase
+        env: 
+          FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
