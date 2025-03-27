@@ -47,13 +47,13 @@ jobs:
           target: google_apis
           arch: x86_64
           script: |
-          echo '⏳ Waiting for emulator to fully boot...'
-          boot_completed=""
-          until [[ "$boot_completed" == "1" ]]; do
-            boot_completed=$(adb -e shell getprop sys.boot_completed 2>/dev/null | tr -d '')
-            sleep 2
-          done
-          echo '✅ Emulator booted! Starting test...'
+            echo '⏳ Waiting for emulator to fully boot...'
+            boot_completed=""
+            until [[ "$boot_completed" == "1" ]]; do
+              boot_completed=$(adb -e shell getprop sys.boot_completed 2>/dev/null | tr -d '')
+              sleep 2
+            done
+            echo '✅ Emulator booted! Starting test...'
             flutter drive \
               --driver=test_driver/integration_test.dart \
               --target=lib/main_${{ env.FLAVOR }}.dart \
